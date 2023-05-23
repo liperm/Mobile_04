@@ -8,13 +8,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class ContatoAdapter extends RecyclerView.Adapter <ContatoAdapter.ContatoViewHolder > {
     private int checkedPosition = 0;
-    private String[] contatos;
-    ContatoAdapter(String[] contatos) {
+    private ArrayList<Contato> contatos;
+    ContatoAdapter(ArrayList<Contato> contatos) {
         this.contatos = contatos;
     }
-
     private String getAbsoluteAdapterPosition() {
         return null;
     }
@@ -29,27 +30,29 @@ public class ContatoAdapter extends RecyclerView.Adapter <ContatoAdapter.Contato
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ContatoViewHolder viewHolder, int i) {
-        viewHolder.nomeView.setText(contatos[i]);
+        viewHolder.nameTextView.setText(contatos.get(i).getName());
+        viewHolder.phoneTextView.setText(contatos.get(i).getNumber());
     }
     @Override
     public int getItemCount() {
-        return contatos.length;
+        return contatos.size();
     }
-    public String getSelected() {
+    public Contato getSelected() {
         if (checkedPosition != -1) {
-            return this.contatos[checkedPosition];
+            return this.contatos.get(checkedPosition);
         }
         return null;
     }
 
     class ContatoViewHolder extends RecyclerView.ViewHolder {
-        private TextView nomeView;
-        //private TextView telefoneView;
+        private TextView nameTextView;
+        private TextView phoneTextView;
 
         ContatoViewHolder(@NonNull View itemView) {
             super(itemView);
-            nomeView = itemView.findViewById(R.id.tvListNome);
-            //telefoneView = itemView.findViewById(R.id.imageView);
+            nameTextView = itemView.findViewById(R.id.nameTextView);
+            phoneTextView = itemView.findViewById(R.id.phoneTextView);
+
         }
 //        void bind(final String time) {
 //            Log.w("getBindingAdapterPosition()", getAbsoluteAdapterPosition() + "");
