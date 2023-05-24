@@ -14,13 +14,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import br.univali.contatmanager.database.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerViewContatos;
     private Button btnAdicionar;
-    private ContatoAdapter adapterTimes;
+    private ContatoAdapter adapter;
     private ArrayList<Pessoa> pessoas = new ArrayList<Pessoa>();
     private DatabaseHelper db;
 
@@ -39,8 +41,26 @@ public class MainActivity extends AppCompatActivity {
         this.db = new DatabaseHelper(this);
         this.pessoas.addAll(db.getPessoas());
 
-        ContatoAdapter adapter = new ContatoAdapter(pessoas);
+        Collections.sort(this.pessoas, new Comparator<Pessoa>() {
+            @Override
+            public int compare(Pessoa p1, Pessoa p2) {
+                return p1.getName().compareTo(p2.getName());
+            }
+        });
+
+        this.adapter = new ContatoAdapter(pessoas);
         recyclerViewContatos.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new ContatoAdapter.OnItemClickListener() {
+            @Override
+            public void onDeleteClick(int position) {
+                Pessoa p = pessoas.get(position);
+                db.deletePessoa(p.getId());
+                pessoas.remove(p);
+                adapter.notifyDataSetChanged();
+                System.out.println("Delete button clicked at position: " + position + " with id " + p.getId());
+            }
+        });
 
         this.btnAdicionar.setOnClickListener(new View.OnClickListener() {
             @Override

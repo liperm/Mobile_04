@@ -3,6 +3,8 @@ import android.annotation.SuppressLint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -12,11 +14,21 @@ import java.util.ArrayList;
 public class ContatoAdapter extends RecyclerView.Adapter <ContatoAdapter.ContatoViewHolder > {
     private int checkedPosition = 0;
     private ArrayList<Pessoa> pessoas;
+    private OnItemClickListener listener;
+
     ContatoAdapter(ArrayList<Pessoa> pessoas) {
         this.pessoas = pessoas;
     }
     private String getAbsoluteAdapterPosition() {
         return null;
+    }
+
+    public interface OnItemClickListener {
+        void onDeleteClick(int position);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
     }
 
     @NonNull
@@ -44,11 +56,23 @@ public class ContatoAdapter extends RecyclerView.Adapter <ContatoAdapter.Contato
 
     class ContatoViewHolder extends RecyclerView.ViewHolder {
         private TextView nameTextView;
-
+        private ImageButton deleteButton;
         ContatoViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.nameTextView);
+            deleteButton = itemView.findViewById(R.id.deleteButton);
 
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (listener != null) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            listener.onDeleteClick(position);
+                        }
+                    }
+                }
+            });
         }
 //        void bind(final String time) {
 //            Log.w("getBindingAdapterPosition()", getAbsoluteAdapterPosition() + "");

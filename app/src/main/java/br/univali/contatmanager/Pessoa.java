@@ -5,6 +5,16 @@ import java.util.ArrayList;
 public class Pessoa {
     private String name;
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    private long id;
+
     public ArrayList<Contato> getContatos() {
         return contatos;
     }
@@ -19,9 +29,9 @@ public class Pessoa {
 
     private ArrayList<Contato> contatos;
 
-    public Pessoa(String name) {
+    public Pessoa(long id, String name) {
         this.name = name;
-
+        this.id = id;
     }
 
     public String getName() {

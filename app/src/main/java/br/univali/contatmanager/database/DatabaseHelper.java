@@ -68,13 +68,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Pessoa> pessoas = new ArrayList<Pessoa>();
         if(c.moveToFirst()) {
             do {
-                System.out.println(c.getString(0));
-                System.out.println(c.getString(1));
-                pessoas.add(new Pessoa(c.getString(1)));
+                pessoas.add(new Pessoa(c.getLong(0), c.getString(1)));
             } while(c.moveToNext());
         }
         db.close();
         return pessoas;
+    }
+
+    public void deletePessoa(long id) {
+        db = this.getWritableDatabase();
+        db.delete(TABLE_PESSOA, "_id=?", new String[]{Long.toString(id)});
+        db.close();
     }
 
     public long createContato (Contato c) {
