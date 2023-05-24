@@ -1,6 +1,5 @@
 package br.univali.contatmanager;
 import android.annotation.SuppressLint;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +11,9 @@ import java.util.ArrayList;
 
 public class ContatoAdapter extends RecyclerView.Adapter <ContatoAdapter.ContatoViewHolder > {
     private int checkedPosition = 0;
-    private ArrayList<Contato> contatos;
-    ContatoAdapter(ArrayList<Contato> contatos) {
-        this.contatos = contatos;
+    private ArrayList<Pessoa> pessoas;
+    ContatoAdapter(ArrayList<Pessoa> pessoas) {
+        this.pessoas = pessoas;
     }
     private String getAbsoluteAdapterPosition() {
         return null;
@@ -30,28 +29,25 @@ public class ContatoAdapter extends RecyclerView.Adapter <ContatoAdapter.Contato
     @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(ContatoViewHolder viewHolder, int i) {
-        viewHolder.nameTextView.setText(contatos.get(i).getName());
-        viewHolder.phoneTextView.setText(contatos.get(i).getNumber());
+        viewHolder.nameTextView.setText(pessoas.get(i).getName());
     }
     @Override
     public int getItemCount() {
-        return contatos.size();
+        return pessoas.size();
     }
-    public Contato getSelected() {
+    public Pessoa getSelected() {
         if (checkedPosition != -1) {
-            return this.contatos.get(checkedPosition);
+            return this.pessoas.get(checkedPosition);
         }
         return null;
     }
 
     class ContatoViewHolder extends RecyclerView.ViewHolder {
         private TextView nameTextView;
-        private TextView phoneTextView;
 
         ContatoViewHolder(@NonNull View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.nameTextView);
-            phoneTextView = itemView.findViewById(R.id.phoneTextView);
 
         }
 //        void bind(final String time) {
