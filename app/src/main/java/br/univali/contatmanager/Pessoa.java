@@ -29,9 +29,9 @@ public class Pessoa {
 
     private ArrayList<Contato> contatos;
 
-    public Pessoa(long id, String name) {
+    public Pessoa(String name) {
         this.name = name;
-        this.id = id;
+        this.contatos = new ArrayList<Contato>();
     }
 
     public String getName() {

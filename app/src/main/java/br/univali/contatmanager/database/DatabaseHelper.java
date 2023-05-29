@@ -68,7 +68,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ArrayList<Pessoa> pessoas = new ArrayList<Pessoa>();
         if(c.moveToFirst()) {
             do {
-                pessoas.add(new Pessoa(c.getLong(0), c.getString(1)));
+                Pessoa p = new Pessoa(c.getString(1));
+                p.setId(c.getLong(0));
+                pessoas.add(p);
             } while(c.moveToNext());
         }
         db.close();
@@ -81,13 +83,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public long createContato (Contato c) {
+    public long createContato (long pessoa_id, Contato c) {
         db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
         cv.put("number", c.getNumber());
         cv.put("type", c.getType());
+        cv.put("id_pessoa", pessoa_id);
 
-        long id = db.insert(TABLE_PESSOA, null, cv);
+        long id = db.insert(TABLE_CONTATO, null, cv);
         db.close();
         return id;
     }

@@ -2,6 +2,7 @@ package br.univali.contatmanager;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,14 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Pessoa> pessoas = new ArrayList<Pessoa>();
     private DatabaseHelper db;
 
+    void sortPessoas(){
+        Collections.sort(this.pessoas, new Comparator<Pessoa>() {
+            @Override
+            public int compare(Pessoa p1, Pessoa p2) {
+                return p1.getName().compareTo(p2.getName());
+            }
+        });
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,12 +50,7 @@ public class MainActivity extends AppCompatActivity {
         this.db = new DatabaseHelper(this);
         this.pessoas.addAll(db.getPessoas());
 
-        Collections.sort(this.pessoas, new Comparator<Pessoa>() {
-            @Override
-            public int compare(Pessoa p1, Pessoa p2) {
-                return p1.getName().compareTo(p2.getName());
-            }
-        });
+        this.sortPessoas();
 
         this.adapter = new ContatoAdapter(pessoas);
         recyclerViewContatos.setAdapter(adapter);
@@ -62,19 +66,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+
         this.btnAdicionar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                EditText nameText = (EditText)findViewById(R.id.editTextName);
-//                String name = nameText.getText().toString();
-//
-//                EditText phoneNumberText = (EditText) findViewById(R.id.editTextPhone);
-//                String phoneNumber = phoneNumberText.getText().toString();
-//
-//                Pessoa pessoa = new Pessoa(name, phoneNumber, "residencial");
-//                pessoas.add(pessoa);
-//                adapter.notifyDataSetChanged();
+                Intent intent = new Intent(MainActivity.this, ContactActivity.class);
+                startActivityForResult(intent, 1);
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        db = new DatabaseHelper(MainActivity.this);
+        pessoas.clear();
+        pessoas.addAll(db.getPessoas());
+        adapter.notifyDataSetChanged();
+        sortPessoas();
     }
 }

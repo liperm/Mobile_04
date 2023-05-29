@@ -6,6 +6,10 @@ public class Contato {
         this.type = type;
     }
 
+    public Contato() {
+
+    }
+
     private String number;
     private String type;
 
